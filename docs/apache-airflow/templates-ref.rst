@@ -38,6 +38,9 @@ Variable                                    Type                  Description
 =========================================== ===================== ===================================================================
 ``{{ data_interval_start }}``               `pendulum.DateTime`_  Start of the data interval. Added in version 2.2.
 ``{{ data_interval_end }}``                 `pendulum.DateTime`_  End of the data interval. Added in version 2.2.
+``{{ dag_run.logical_date }}``              `pendulum.DateTime`_  | A logical date for which the DAG run is scheduled. It can be associated with a specific date or time.
+                                                                  | Also a subclass of [datetime.datetime](https://docs.python.org/3/library/datetime.html#datetime.datetime).
+                                                                  | Example: ``2018-01-01 00:00:00``.
 ``{{ ds }}``                                str                   | The DAG run's logical date as ``YYYY-MM-DD``.
                                                                   | Same as ``{{ dag_run.logical_date | ds }}``.
 ``{{ ds_nodash }}``                         str                   Same as ``{{ dag_run.logical_date | ds_nodash }}``.
@@ -103,7 +106,8 @@ existing code to use other variables instead.
 =====================================   ====================================
 Deprecated Variable                     Description
 =====================================   ====================================
-``{{ execution_date }}``                the execution date (logical date), same as ``logical_date``
+``{{ execution_date }}``                the execution date (logical date), same as ``logical_date``. 
+                                        For modifying the hour can use ``{{ (execution_date - macros.timedelta(hours=<number_of_hours>)) }}``
 ``{{ next_execution_date }}``           the logical date of the next scheduled run (if applicable);
                                         you may be able to use ``data_interval_end`` instead
 ``{{ next_ds }}``                       the next execution date as ``YYYY-MM-DD`` if exists, else ``None``
